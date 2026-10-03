@@ -69,3 +69,11 @@ media/
 
 # Session files
 *.session
+
+# Model weights
+*.pt
+*.pth
+*.h5
+*.bin
+*.safetensors
+*.onnx
