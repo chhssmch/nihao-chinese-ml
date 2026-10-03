@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <h2><img src="{% static 'images/lamp.png' %}" alt="лампа" class="sticker-small">Что в видео?</h2>
+    <p>
+        Загрузите короткое видео — модель обработает
+        по одному кадру в секунду, найдёт объекты и подпишет их
+        иероглифами. Используется <em><strong>YOLOv8 (PyTorch)</strong></em>.
+    </p>
+
+    {% if error %}
+        <div class="alert-error">{{ error }}</div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" class="image-form">
+        {% csrf_token %}
+
+        <label for="video_file" class="form-label">Видеофайл:</label>
+        <input
+            type="file"
+            id="video_file"
+            name="video_file"
+            class="form-file"
+            accept=".mp4,.mov,.avi,.mkv,.webm"
+            required>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Обработать видео →</button>
+        </div>
+    </form>
+
+    {% if result %}
+        <!-- <div class="translate-result">
+            <label class="form-label">Статистика:</label>
+            <ul class="ocr-list">
+                <li class="ocr-item">
+                    <span class="ocr-text">
+                        Длительность: <strong>{{ result.duration_seconds }} с</strong>
+                    </span>
+                    <span class="ocr-confidence">
+                        Обработано кадров: <strong>{{ result.total_frames_processed }}</strong>
+                    </span>
+                </li>
+            </ul> -->
+
+            <label class="form-label" style="margin-top: 15px; display: block;">Словарик из видео:</label>
+            <ul class="ocr-list">
+                {% for obj in result.unique_objects %}
+                    <li class="ocr-item">
+                        <span class="ocr-text">
+                            {{ obj.label_zh }}
+                            <small style="color:#8a6d3b;">({{ obj.label_en }})</small>
+                        </span>
+                        <span class="ocr-confidence">
+                            встречается {{ obj.count }} раз · макс. уверенность {{ obj.max_confidence }}
+                        </span>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <label class="form-label" style="margin-top: 30px; display: block;">Размеченные кадры:</label>
+            <div class="frames-grid">
+                {% for url in result.frame_urls %}
+                    <img src="{{ url }}" alt="Кадр" class="frame-img">
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

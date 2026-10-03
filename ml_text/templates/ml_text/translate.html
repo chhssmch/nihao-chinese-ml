@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <h2>
+        <img src="{% static 'images/knot.png' %}" alt="узел" class="sticker-small">Перевод EN ⇄ ZH</h2>
+    <p>
+        Выберите тип перевода и введите текст.
+        Перевод выполняется с помощью моделей
+        <em><strong>Helsinki-NLP/opus-mt-en-zh</strong></em> и <em><strong>Helsinki-NLP/opus-mt-zh-en</strong></em> (Hugging Face).
+    </p>
+
+    {% if error %}
+        <div class="alert-error">{{ error }}</div>
+    {% endif %}
+
+    <form method="post" class="translate-form">
+        {% csrf_token %}
+
+        <div class="direction-toggle">
+            <label class="radio-label">
+                <input type="radio" name="direction" value="en_to_zh" {% if direction == 'en_to_zh' or not direction %}checked{% endif %}>
+                <span><img src="{% static 'images/eng_flag.png' %}" alt="флаг_англ" class="flag-icon"> English → <img src="{% static 'images/chn_flag.png' %}" alt="флаг_кит" class="flag-icon" <img src="{% static 'images/chn_flag.png' %}" alt="флаг_кит" class="flag-icon"> 中文</span>
+            </label>
+            <label class="radio-label">
+                <input type="radio" name="direction" value="zh_to_en" {% if direction == 'zh_to_en' %}checked{% endif %}>
+                <span><img src="{% static 'images/chn_flag.png' %}" alt="флаг_кит" class="flag-icon"> 中文 → <img src="{% static 'images/eng_flag.png' %}" alt="флаг_англ" class="flag-icon"> English</span>
+            </label>
+        </div>
+
+        <label for="source_text" class="form-label" id="form_label">
+            {% if direction == 'zh_to_en' %}
+                Текст на китайском:
+            {% else %}
+                Текст на английском:
+            {% endif %}
+        </label>
+        <textarea
+            id="source_text"
+            name="source_text"
+            class="form-textarea"
+            rows="6"
+            maxlength="1000"
+            placeholder="{% if direction == 'zh_to_en' %}你好，你好吗？{% else %}Hello, how are you?{% endif %}"
+            required>{{ source_text }}</textarea>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Перевести →</button>
+        </div>
+    </form>
+
+    {% if translated_text %}
+        <div class="translate-result">
+            <label class="form-label">
+                {% if direction == 'zh_to_en' %}
+                     <img src="{% static 'images/eng_flag.png' %}" alt="флаг_англ" class="flag-icon">
+   Результат:
+                {% else %}
+                                <img src="{% static 'images/chn_flag.png' %}" alt="флаг_кит" class="flag-icon">
+   Результат:
+                {% endif %}
+            </label>
+            <p class="result-text">{{ translated_text }}</p>
+        </div>
+    {% endif %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const radios = document.querySelectorAll('input[name="direction"]');
+            const textarea = document.getElementById('source_text');
+            const label = document.getElementById('form_label');
+
+            radios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'zh_to_en') {
+                        label.textContent = 'Текст на китайском:';
+                        textarea.placeholder = '你好，你好吗？';
+                    } else {
+                        label.textContent = 'Текст на английском:';
+                        textarea.placeholder = 'Hello, how are you?';
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

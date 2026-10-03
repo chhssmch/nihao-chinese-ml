@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <h2>
+            <img src="{% static 'images/fan.png' %}" alt="веер" class="sticker-small">  Расшифровка китайской речи</h2>
+    <p>
+        Загрузите аудиофайл с китайской речью — модель <em><strong>Whisper Small</strong></em>
+        распознает её и покажет текст. Поддерживаемые форматы:
+        .wav, .mp3, .flac, .ogg, .m4a (максимум 10 МБ).
+    </p>
+
+    {% if error %}
+        <div class="alert-error">{{ error }}</div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" class="audio-form">
+        {% csrf_token %}
+
+        <label for="audio_file" class="form-label">Аудиофайл:</label>
+        <input
+            type="file"
+            id="audio_file"
+            name="audio_file"
+            class="form-file"
+            accept=".wav,.mp3,.flac,.ogg,.m4a"
+            required>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Распознать →</button>
+        </div>
+    </form>
+
+    {% if recognized_text %}
+        <div class="translate-result">
+            <label class="form-label">Распознанный текст:</label>
+            <p class="result-text">{{ recognized_text }}</p>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,37 @@
+{% load static %} <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>你好 | Учим китайский</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'images/icon.png' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="site-header">
+       <h1>
+    <img src="{% static 'images/dragon.png' %}" alt="дракон" class="header-sticker">
+    你好 · Учим китайский
+    <img src="{% static 'images/dragon.png' %}" alt="дракон" class="header-sticker header-sticker--flipped">
+        </h1>
+        <nav>
+            <a href="{% url 'ml_text:home' %}" class="nav-link">Главная</a>
+            <a href="{% url 'ml_text:translate' %}" class="nav-link">Перевод</a>
+            <a href="{% url 'ml_audio:transcribe' %}" class="nav-link">Расшифровка с аудио</a>
+            <a href="{% url 'ml_image:recognize' %}" class="nav-link">Что на фото?</a>
+            <a href="{% url 'ml_video:analyze' %}" class="nav-link">Рассмотрим видео!</a>
+
+        </nav>
+    </header>
+
+    <main class="container">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <p>你好 · Учим китайский вместе</p>
+        <p>&copy; 2026 NiHao. Все права защищены.</p>
+    </footer>
+
+</body>
+</html>

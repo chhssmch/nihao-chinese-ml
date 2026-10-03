@@ -1,0 +1,28 @@
+{% extends 'base.html' %} 
+{% block content %} 
+{% load static %}
+    <h2>欢迎! Добро пожаловать!</h2>
+    <p>
+        Это сайт для изучения китайского языка с использованием 
+        инструментов машинного обучения. Здесь вы сможете:
+    </p>
+    <ul class="coin-list">
+        <li>
+            <img src="{% static 'images/coin.png' %}" alt="монетка" class="coin-icon">
+            <span>переводить с английского на китайский и наоборот;</span>
+        </li>
+        <li>
+            <img src="{% static 'images/coin.png' %}" alt="монетка" class="coin-icon">
+            <span>распознавать китайскую речь из аудио;</span>
+        </li>
+        <li>
+            <img src="{% static 'images/coin.png' %}" alt="монетка" class="coin-icon">
+            <span>изучать иероглифы по фотографиям;</span>
+        </li>
+        <li>
+            <img src="{% static 'images/coin.png' %}" alt="монетка" class="coin-icon">
+            <span>анализировать видео на китайском с помощью ML-моделей.</span>
+        </li>
+    </ul>
+    <p><strong>开始学习吧! Начните учиться прямо сейчас!</strong></p>
+{% endblock %}

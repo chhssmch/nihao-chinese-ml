@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <h2><img src="{% static 'images/flower.png' %}" alt="цветок" class="sticker-small">Что на фото?</h2>
+    <p>
+        Загрузите фотографию — модель найдёт объекты и подпишет их
+        иероглифами. Используется <em><strong>YOLOv8 (PyTorch)</strong></em>,
+        обученная на датасете COCO (80 классов).
+    </p>
+
+    {% if error %}
+        <div class="alert-error">{{ error }}</div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" class="image-form">
+        {% csrf_token %}
+
+        <label for="image_file" class="form-label">Изображение:</label>
+        <input
+            type="file"
+            id="image_file"
+            name="image_file"
+            class="form-file"
+            accept=".jpg,.jpeg,.png,.bmp,.webp"
+            required>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Найти объекты →</button>
+        </div>
+    </form>
+
+    {% if detected_items %}
+    <div class="translate-result">
+        {% if result_url %}
+            <label class="form-label">Результат:</label>
+            <img src="{{ result_url }}" alt="Размеченное изображение" class="result-img">
+        {% endif %}
+
+      <label class="form-label" style="margin-top: 30px; display: block;">Найденные объекты:</label>
+        <ul class="ocr-list">
+            {% for item in detected_items %}
+                <li class="ocr-item">
+                    <span class="ocr-text">
+                        {{ item.label_zh }}
+                        <small style="color:#8a6d3b;">({{ item.label_en }})</small>
+                    </span>
+                    <span class="ocr-confidence">уверенность: {{ item.confidence }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+{% endblock %}

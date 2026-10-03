@@ -1,0 +1,24 @@
+# Django
+Django==6.1.1
+
+# ML Libraries
+transformers==4.44.2
+torch==2.2.2
+accelerate==0.33.0
+sentencepiece==0.2.2
+
+# Computer Vision
+numpy==1.26.4
+opencv-python==4.10.0.84
+ultralytics==8.4.155
+
+# Additional dependencies
+torchvision==0.17.2
+
+# FastAPI
+fastapi==0.115.0
+uvicorn==0.32.0
+pydantic==2.9.2
+httpx==0.28.0
+pytest==9.1.1
+pytest-asyncio==1.4.0
